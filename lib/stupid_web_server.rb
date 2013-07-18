@@ -1,4 +1,4 @@
-class IGiveYouIndex
+class StupidWebServer
   def call(env)
     path = env['PATH_INFO']
     case

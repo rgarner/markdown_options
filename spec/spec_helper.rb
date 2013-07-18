@@ -5,7 +5,7 @@ require 'kramdown'
 require 'capybara/poltergeist'
 require 'capybara/rspec'
 
-require 'i_give_you_index'
+require 'stupid_web_server'
 
-Capybara.app = IGiveYouIndex.new
+Capybara.app = StupidWebServer.new
 # Capybara.javascript_driver = :poltergeist

@@ -24,34 +24,36 @@ HTML
       it { should include '[An external link][1]' }
       it { should include '[1]: http://gov.uk' }
     end
+
+    describe 'the image' do
+      it { should include('![](http://stream1.gifsoup.com/view/22911/larry-stare-o.gif') }
+    end
   end
 
   describe 'Kramdown' do
     it_behaves_like 'expected markdown output'
 
-    before(:all) { puts "Kramdown\n========" }
+    before(:all) do
+      puts "Kramdown\n========"
+    end
 
     subject(:markdown) { Kramdown::Document.new(test_html, input: 'html').to_kramdown }
-
-    let(:doc) {  }
   end
 
   describe 'In-browser options', type: :feature, js: true do
-    describe 'reMarked.js' do
-      it_behaves_like 'expected markdown output'
+    it_behaves_like 'expected markdown output'
 
+    before do
+      visit '/'
+      fill_in 'Paste here:', with: test_html
+      click_button 'Convert'
+    end
+
+    subject(:markdown) { page.find('textarea#result').text }
+
+    describe 'reMarked.js' do
       before(:all) do
         puts "\nreMarked.js\n==========="
-      end
-
-      before(:each) do
-        visit '/'
-        fill_in 'Paste here:', with: test_html
-        click_button 'Convert'
-      end
-
-      subject(:markdown) do
-        page.find('textarea#result').text
       end
     end
   end
