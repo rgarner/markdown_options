@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe 'Some options for converting HTML to markdown' do
-  let(:html) {
+  let(:test_html) {
     <<-HTML
     <h1>Hi</h1>
     <a href="http://gov.uk ">An external link</a>
@@ -31,26 +31,27 @@ HTML
 
     before(:all) { puts "Kramdown\n========" }
 
-    subject(:markdown) { Kramdown::Document.new(html, input: 'html').to_kramdown }
+    subject(:markdown) { Kramdown::Document.new(test_html, input: 'html').to_kramdown }
 
     let(:doc) {  }
   end
 
-  describe 'In-browser options' do
+  describe 'In-browser options', type: :feature, js: true do
     describe 'reMarked.js' do
       it_behaves_like 'expected markdown output'
 
-      before(:all) { puts "\nreMarked.js\n===========" }
+      before(:all) do
+        puts "\nreMarked.js\n==========="
+      end
 
-      let(:compiledJS) do
-        ExecJS.compile(
-            File.read('js/reMarked.js') + "\n" +
-            File.read('js/reMarkableRunner.js')
-        )
+      before(:each) do
+        visit '/'
+        fill_in 'Paste here:', with: test_html
+        click_button 'Convert'
       end
 
       subject(:markdown) do
-        compiledJS.call('run', html)
+        page.find('textarea#result').text
       end
     end
   end

@@ -1,4 +1,4 @@
-function run(html) {
+function convertToMarkdown(html) {
   var options = {
 
   };
